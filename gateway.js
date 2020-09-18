@@ -1,23 +1,23 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
-import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
-import { ApolloGateway } from '@apollo/gateway';
-import AppSource from './gatewaySource';
+import express from "express";
+import { ApolloServer } from "apollo-server-express";
+import { ApolloGateway } from "@apollo/gateway";
+import AppSource from "./gatewaySource";
 
 const gateway = new ApolloGateway({
   serviceList: [
     {
-      name: 'auth',
+      name: "auth",
       url: `${process.env.AUTH_DOMAIN}${process.env.GRAPHQL_PATH}`,
     },
     {
-      name: 'course',
+      name: "course",
       url: `${process.env.COURSE_DOMAIN}${process.env.GRAPHQL_PATH}`,
     },
     {
-      name: 'student',
+      name: "student",
       url: `${process.env.STUDENT_DOMAIN}${process.env.GRAPHQL_PATH}`,
     },
   ],
@@ -31,12 +31,9 @@ const app = express();
 const apolloServer = new ApolloServer({
   gateway,
   subscriptions: false,
-  context: ({ req }) => ({
-    req: req,
-    res: req.res,
-  }),
+  context: ({ req }) => ({ req: req, res: req.res }),
 });
 apolloServer.applyMiddleware({ app, cors: false });
 
 app.listen(process.env.GATEWAY_PORT);
-console.log(`Server started at domain: ${process.env.GATEWAY_DOMAIN}`);
+console.log(`Gateway server started at domain: ${process.env.GATEWAY_DOMAIN}`);

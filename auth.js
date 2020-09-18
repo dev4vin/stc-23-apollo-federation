@@ -10,17 +10,10 @@ const app = express();
 app.use(express.json());
 
 const apolloServer = new ApolloServer({
-  schema: buildFederatedSchema([
-    {
-      typeDefs,
-      resolvers,
-    },
-  ]),
+  schema: buildFederatedSchema([{ typeDefs, resolvers }]),
   context: ({ req, res }) => ({ req, res }),
 });
 apolloServer.applyMiddleware({ app, cors: false });
 
 app.listen(parseInt(process.env.AUTH_PORT));
-console.log(
-  `Server started at domain: ${process.env.AUTH_DOMAIN}`
-);
+console.log(`Auth server started at domain: ${process.env.AUTH_DOMAIN}`);
