@@ -29,9 +29,6 @@ export function authCheck() {
 
     // send not authorized error
     res.status(401);
-    res.json({
-      "data": undefined,
-      "errors": [{ "message": "Not authorized", }]
-    });
+    res.json({});
   };
 }
