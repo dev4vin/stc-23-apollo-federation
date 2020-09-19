@@ -13,7 +13,7 @@ const apolloServer = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),
   context: ({ req, res }) => ({ req, res }),
 });
-apolloServer.applyMiddleware({ app, cors: false });
 
-app.listen(parseInt(process.env.AUTH_PORT));
-console.log(`Auth server started at domain: ${process.env.AUTH_DOMAIN}`);
+apolloServer.applyMiddleware({ app, cors: false });
+app.listen(parseInt(process.env.AUTH_PORT)); // 4001
+console.log(`Auth server started at domain: ${process.env.AUTH_DOMAIN}`); // http://localhost:4001

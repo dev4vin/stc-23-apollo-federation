@@ -2,25 +2,33 @@ import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   extend type Query {
-    course(id: ID!): Course
+    course(id: Int!): Course
     courses: [Course]
   }
 
   type Course @key(fields: "id") {
-    id: ID!
+    id: Int!
     name: String!
     students: [Student]
   }
 
   extend type Student @key(fields: "id") {
-    id: ID! @external
+    id: Int! @external
   }
 `;
+
+const courses = {
+  1: { name: "course 1", students: [1, 2, 3, 4, 5, 6] },
+  2: { name: "course 2", students: [4, 5, 6, 7, 8, 9] },
+  3: { name: "course 3", students: [1, 2, 3, 7, 8, 9] },
+};
 
 export const resolvers = {
   Course: {
     __resolveReference(ref) {
-      return { id: ref.id, name: "hello course" };
+      const course = courses[ref.id];
+      if (course === undefined) throw new Error(`Course ${ref.id} not found`);
+      return { id: ref.id, name: course.name, students: course.students };
     },
     students(course) {
       return course.students.map((id) => ({ __typename: "Student", id }));
@@ -28,10 +36,15 @@ export const resolvers = {
   },
   Query: {
     course: async (_, { id }, context) => {
-      return { id, name: "hello course", students: [1, 2, 3] };
+      const course = courses[id];
+      if (course === undefined) throw new Error(`Course ${id} not found`);
+      return { id, name: course.name, students: course.students };
     },
     courses: async (_, {}, context) => {
-      return [{ id: 1, name: "hello course", students: [1, 2, 3] }];
+      return Object.entries(courses).map((x) => {
+        const v = x[1];
+        return { id: x[0], name: v.name, students: v.students };
+      });
     },
   },
 };

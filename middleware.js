@@ -12,7 +12,11 @@ export function authCheck() {
   return (req, res, next) => {
     // check gateway
     if (
-      checkHeaderFromRequest(req, process.env.GATEWAY_INIT_HEADER_NAME, process.env.GATEWAY_INIT_HEADER_VALUE)
+      checkHeaderFromRequest(
+        req,
+        process.env.GATEWAY_INIT_HEADER_NAME, // x-gateway
+        process.env.GATEWAY_INIT_HEADER_VALUE // superSecretGatewaySecret
+      )
     ) {
       next();
       return;
@@ -20,8 +24,16 @@ export function authCheck() {
 
     // check authorization
     if (
-      checkHeaderFromRequest(req, "authorization", `Bearer ${process.env.SIGNED_ACCESS_TOKEN}`) &&
-      checkAccessCookie(req, process.env.SIGNED_COOKIE_NAME, process.env.SIGNED_COOKIE_TOKEN)
+      checkHeaderFromRequest(
+        req,
+        "authorization",
+        `Bearer ${process.env.SIGNED_ACCESS_TOKEN}` // fakeSignedAccessToken
+      ) &&
+      checkAccessCookie(
+        req,
+        process.env.SIGNED_COOKIE_NAME, // x-fake-signed-cookie
+        process.env.SIGNED_COOKIE_TOKEN // fakeSignedCookieToken
+      )
     ) {
       next();
       return;

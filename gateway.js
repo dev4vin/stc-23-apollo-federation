@@ -11,14 +11,17 @@ const gateway = new ApolloGateway({
     {
       name: "auth",
       url: `${process.env.AUTH_DOMAIN}${process.env.GRAPHQL_PATH}`,
+      // http://localhost:4001/graphql
     },
     {
       name: "course",
       url: `${process.env.COURSE_DOMAIN}${process.env.GRAPHQL_PATH}`,
+      // http://localhost:4002/graphql
     },
     {
       name: "student",
       url: `${process.env.STUDENT_DOMAIN}${process.env.GRAPHQL_PATH}`,
+      // http://localhost:4003/graphql
     },
   ],
   buildService({ name, url }) {
@@ -26,14 +29,14 @@ const gateway = new ApolloGateway({
   },
 });
 
-const app = express();
-
 const apolloServer = new ApolloServer({
   gateway,
   subscriptions: false,
-  context: ({ req }) => ({ req: req, res: req.res }),
+  context: ({ req }) => ({ req, res: req.res }),
 });
+
+const app = express();
 apolloServer.applyMiddleware({ app, cors: false });
 
-app.listen(process.env.GATEWAY_PORT);
-console.log(`Gateway server started at domain: ${process.env.GATEWAY_DOMAIN}`);
+app.listen(process.env.GATEWAY_PORT); // 3000
+console.log(`Gateway server started at domain: ${process.env.GATEWAY_DOMAIN}`); // http://localhost:3000

@@ -13,12 +13,11 @@ export const typeDefs = gql`
 export const resolvers = {
   Mutation: {
     login: async (_, { email, password }, context) => {
-      const accessToken = process.env.SIGNED_ACCESS_TOKEN;
-      const cookieName = process.env.SIGNED_COOKIE_NAME;
+      const accessToken = process.env.SIGNED_ACCESS_TOKEN; // fakeSignedAccessToken
+      const cookieName = process.env.SIGNED_COOKIE_NAME; // x-fake-signed-cookie
       const cookieDomain = "localhost";
-      const cookieToken = process.env.SIGNED_COOKIE_TOKEN;
-      const cookieExpiration = new Date();
-      cookieExpiration.setMinutes(cookieExpiration.getDate() + 5);
+      const cookieToken = process.env.SIGNED_COOKIE_TOKEN; // fakeSignedCookieToken
+      const cookieExpiration = new Date(new Date().getTime() + 10 * 60000);
 
       context.res.cookie(cookieName, cookieToken, {
         domain: cookieDomain,

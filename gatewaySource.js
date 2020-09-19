@@ -1,4 +1,4 @@
-import { RemoteGraphQLDataSource } from '@apollo/gateway';
+import { RemoteGraphQLDataSource } from "@apollo/gateway";
 
 export default class AppSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
@@ -6,8 +6,8 @@ export default class AppSource extends RemoteGraphQLDataSource {
       // This means that the gateway is starting up.
       // It will ping the microservices for their schema.
       request.http.headers.set(
-        process.env.GATEWAY_INIT_HEADER_NAME,
-        process.env.GATEWAY_INIT_HEADER_VALUE
+        process.env.GATEWAY_INIT_HEADER_NAME, // x-gateway
+        process.env.GATEWAY_INIT_HEADER_VALUE // superSecretGatewaySecret
       );
       return;
     }
@@ -23,10 +23,10 @@ export default class AppSource extends RemoteGraphQLDataSource {
   didReceiveResponse({ response, request, context }) {
     if (context.res === undefined) return response;
 
-    const cookie = response.http.headers.get('set-cookie');
+    const cookie = response.http.headers.get("set-cookie");
     if (cookie) {
       // Forward set cookies
-      context.res.set('set-cookie', cookie);
+      context.res.set("set-cookie", cookie);
     }
 
     return response;
