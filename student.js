@@ -19,5 +19,5 @@ const apolloServer = new ApolloServer({
 });
 apolloServer.applyMiddleware({ app, cors: false });
 
-app.listen(process.env.STUDENT_PORT);
-console.log(`Student server started at domain: ${process.env.STUDENT_DOMAIN}`);
+app.listen(process.env.STUDENT_PORT); // 4003
+console.log(`Student server started at domain: ${process.env.STUDENT_DOMAIN}`); // http://localhost:4003

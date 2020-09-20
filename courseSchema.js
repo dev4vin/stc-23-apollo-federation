@@ -25,13 +25,13 @@ const courses = {
 
 export const resolvers = {
   Course: {
+    students(course) {
+      return course.students.map((id) => ({ __typename: "Student", id }));
+    },
     __resolveReference(ref) {
       const course = courses[ref.id];
       if (course === undefined) throw new Error(`Course ${ref.id} not found`);
       return { id: ref.id, name: course.name, students: course.students };
-    },
-    students(course) {
-      return course.students.map((id) => ({ __typename: "Student", id }));
     },
   },
   Query: {
